@@ -1,0 +1,102 @@
+def keywords(v):   #a function for finding the keywords 
+    keywoord=[]
+    keyword=["char","float","input","double","debut","fin","int","const","string","bool","for","else","if","elif","import","pass","None","break","False","True","except","in","while","class","return","continue","from","del","with","try","assert","async","as"] #initializing a table with all the possible keywords
+    for i in range(0,len(keyword)):#an iterator "i" is for the table so wherever we find the first element of the table in the paragraph 
+        while(v.count(keyword[i])>0):#we count the number of table first element in the paragraph
+            k=v.find(keyword[i])#we store the index of it 
+            keywoord.append(keyword[i])#we add it to the empty table keywoord
+            v=v.replace(keyword[i],' ')#then we delete the keyword from our file (we delete it because we are using the count function in the 'while' if we dont delete it
+        i=i+1                          #then the iterator i would do an infinite loop
+    return v,keywoord#we return both the new paragraph and the table that we already fiiled it
+
+def operators(v): #a function for finding the operators and works the same as the keywords function
+    g_operator=["**=","<<=",">>=","*=","//=","/=","//","**","-=","+=","+","-","==","!=","=","and","or","is not","is","not in","not","&=","^=","|=","&","*","%","/","<=",">=",">","<"]
+    operatorr=[]
+    for i in range(0,len(g_operator)):
+        while(v.count(g_operator[i])>0):
+            k=v.find(g_operator[i])
+            operatorr.append(g_operator[i])
+            v=v.replace(g_operator[i],'')
+        i=i+1
+    return v,operatorr
+
+
+with open('grammaire.txt', 'r') as file:   #using file to refer to the file object(the benefit of with statement is that it wil automatically close the file )(the "r" is for read only )
+    v = file.read().split()#split is fot storing the file into a list whenever there are a space it means a new element in the list
+    v="".join(v)  #this one is for joining the list and make it a paragraph with neither newlines nor spaces
+
+    
+
+g_separator=[",",";",":","{","[","(",")","]","}","|"]  #initializing a table with all the possible separators
+operator=[]   #empty tables 
+separator=[]
+digit=[]
+Vt=[]
+Vn=[]
+keyword=[]
+identificator=[]
+if(v.count("-->")>0):
+    identificator.append("-->")
+    v=v.replace("-->","")
+v,operator=operators(v)  #calling operators function that returns two elements a list and a paragraph and store the list in a list and the paragraph into a variable 
+v,keyword=keywords(v)   #same as the operators function
+for i in range(len(v)):
+    if v[i] in g_separator:   #checking if there is a separators in the paragraph if yes then we add it to the empty list separator 
+        separator.append(v[i])
+    elif v[i].isdigit():     #chacking if there is a digit and add it to the empty list digit
+        digit.append(v[i])
+    elif v[i].isalpha() and v[i].isupper(): #checking if the letter is an alphabet and is upper we add it to the Vn list
+        Vn.append(v[i])
+    elif v[i].isalpha() and v[i].islower(): #checking if the letter is an alphabet and is lower we add it to the Vt list
+        Vt.append(v[i])
+    
+          
+operator = list(dict.fromkeys(operator))    #avoiding repititions of elements in the table 
+separator= list(dict.fromkeys(separator))   #i used this method because we cant find two similar keys in a dictionary  
+digit= list(dict.fromkeys(digit))
+Vt= list(dict.fromkeys(Vt))
+Vn= list(dict.fromkeys(Vn))  
+identificator= list(dict.fromkeys(identificator))   
+
+    
+if len(operator)!=0:                   #checking if the length of the list is not null to print its content 
+        print("\n\n operators:")        #if it was empty notthing will appear just to avoid lack of space in the dispalying
+        print("-------------------------------")
+        for i in operator:
+            print(" | "+i,end='')
+            
+if len(separator)!=0:
+        print("\n\n separators:")
+        print("-------------------------------")
+        for i in separator:
+            print(" | "+i,end='')
+            
+if len(Vt)!=0:
+        print("\n\n Vt:")
+        print("-------------------------------")
+        for i in Vt:
+            print(" | "+i,end='')
+            
+if len(Vn)!=0:
+        print("\n\n Vn:")
+        print("---------------------------------")
+        for i in Vn:
+            print(" | "+i,end='')
+            
+if len(digit)!=0:
+        print("\n\n digits:")
+        print("--------------------------------")
+        for i in digit:
+            print(" | "+i,end='')
+
+            
+if len(keyword)!=0:
+        print("\n\n keywords:")
+        print("--------------------------------")
+        for i in keyword:
+            print(" | "+i,end='')
+
+if len(identificator)!=0:
+         print("\n\n identificator:")
+         print("---------------------------------")
+         print(" | "+"-->")   
